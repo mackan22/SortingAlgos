@@ -1,0 +1,129 @@
+import random
+
+#unsorted=[9,1,6,2,4,8,3,5,7]
+unsorted = []
+for i in range(0,3):
+    unsorted.append(random.randint(0,1000))
+
+iterations=0
+def comparativeCheck(list):
+    global iterations
+    iterations+=1
+    sorted=True
+    for i in range(0,len(list)-1):
+        if list[i]>list[i+1]:
+            sorted=False
+    return sorted
+
+
+def bubbleSort(list):
+    localList = list.copy()
+    global iterations
+    sorted=False
+    while not sorted:
+        iterations += 1
+        sorted=True
+        for i in range(0,len(localList)-1):
+            if localList[i]>localList[i+1]:
+                temp = localList[i]
+                localList[i] = localList[i+1]
+                localList[i+1] = temp
+                sorted=False         
+    return localList
+
+
+def bubbleSort2(list,a,counter):
+    localList = list.copy()
+    global iterations
+    iterations += 1
+    n=0
+    if localList[a]>localList[a+1]:
+        n = localList[a]
+        localList[a] = localList[a+1]
+        localList[a+1] = n
+        counter=0
+    else:
+        counter+=1
+    if a<=len(localList)-3:
+        bubbleSort2(localList,a+1,counter)
+    elif counter==len(localList)-1:
+        print(localList)
+    else:
+        bubbleSort2(localList,0,0)
+
+def radixSort(list):
+    newList=[]
+    oldList = list.copy()
+    for k in range(0,3):
+        newList=[]
+        for i in range(0,10):
+            for j in range(len(oldList)):
+                temp = str(oldList[j])
+                if len(temp)-k-1 < 0:
+                    if i == 0:
+                        newList.append(oldList[j])
+                else:
+                    tempInt = int(temp[len(temp)-k-1])
+                    if tempInt == i:
+                        newList.append(oldList[j])
+        oldList=newList
+    print(newList)
+    
+def bogoSort(list):
+    oldList = list.copy()
+    newList =[]
+    for i in range(len(list)):
+        n = random.randint(0,len(oldList)-1)
+        newList.append(oldList[n])
+        oldList.remove(oldList[n])
+    if comparativeCheck(newList):
+        print(newList)
+        global iterations
+        print("Iterations:", iterations)
+    else:
+        bogoSort(newList)
+       
+def bogoSort2(list):
+    oldList = list.copy()
+    newList = []
+    global iterations
+    for i in range(len(list)):
+            n = random.randint(0,len(oldList)-1)
+            newList.append(oldList[n])
+            oldList.remove(oldList[n])
+            iterations += 1
+    while not comparativeCheck(newList):
+        for i in range(len(list)):
+            n = random.randint(0,len(oldList)-1)
+            newList.append(oldList[n])
+            oldList.remove(oldList[n])
+    print("Iterations:", iterations)
+    print(newList)
+        
+print("Bubble sort 1")
+iterations = 0
+print(bubbleSort(unsorted))
+print("Iterations:", iterations)
+print()
+
+print("Bubble sort 2")
+iterations = 0
+print(bubbleSort2(unsorted,0,0))
+print("Iterations:", iterations)
+print()
+
+print("Radix sort")
+print(radixSort(unsorted))
+print()
+
+print("Bogo sort")
+iterations = 0
+print(bogoSort(unsorted))
+print("Iterations:", iterations)
+print()
+
+print("Bogo sort 2")
+iterations = 0
+print(bogoSort2(unsorted))
+print("Iterations:", iterations)
+print()
